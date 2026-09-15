@@ -1,22 +1,23 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from dotenv import load_dotenv
 import os
-import MySQLdb
+from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY, DEBUG
 
 # Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
-app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST", "localhost")
-app.config["MYSQL_USER"] = os.getenv("MYSQL_USER", "root")
-app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD", "")
-app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "employee360")
-app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", 3306))
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "a-dev-secret-key-change-in-production")
+app.config["SECRET_KEY"] = SECRET_KEY
+app.config["DEBUG"] = DEBUG
+app.config["MYSQL_HOST"] = MYSQL_HOST
+app.config["MYSQL_USER"] = MYSQL_USER
+app.config["MYSQL_PASSWORD"] = MYSQL_PASSWORD
+app.config["MYSQL_DB"] = MYSQL_DB
+app.config["MYSQL_PORT"] = MYSQL_PORT
 
 
 def get_db_connection():
-    """Get a MySQL database connection."""
+    """Get a MySQL database connection using configuration."""
     return MySQLdb.connect(
         host=app.config["MYSQL_HOST"],
         user=app.config["MYSQL_USER"],
@@ -39,18 +40,7 @@ def login_required(f):
     return decorated_function
 
 
-@app.route("/")
-@login_required
-def home():
-    """Protected home page - requires login."""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, username, role FROM users WHERE id = %s", (session["user_id"],))
-    user = cursor.fetchone()
-    conn.close()
-    return render_template("base.html", user=user)
-
-
+@app.route("/", methods=["GET"])
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Login route - display login form and handle authentication."""
@@ -73,7 +63,10 @@ def login():
         cursor = conn.cursor()
 
         # Search the users table using parameterized query
-        cursor.execute("SELECT id, username, email, password, role FROM users WHERE username = %s OR email = %s", (username, username))
+        cursor.execute(
+            "SELECT id, username, email, password, role FROM users WHERE username = %s OR email = %s",
+            (username, username),
+        )
         user = cursor.fetchone()
         conn.close()
 
@@ -100,7 +93,6 @@ def logout():
     """Logout route - clear session and redirect to login."""
     # Clear all session data
     session.clear()
-    # Provide a flash message would be nice, but keeping it simple
     return redirect(url_for("login"))
 
 
@@ -108,13 +100,7 @@ def logout():
 def db_test():
     """Simple test route to verify MySQL connection."""
     try:
-        conn = MySQLdb.connect(
-            host=app.config["MYSQL_HOST"],
-            user=app.config["MYSQL_USER"],
-            passwd=app.config["MYSQL_PASSWORD"],
-            db=app.config["MYSQL_DB"],
-            port=app.config["MYSQL_PORT"],
-        )
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT 1")
         result = cursor.fetchone()
@@ -123,8 +109,20 @@ def db_test():
             return jsonify({"status": "success", "message": "Database connection works!"})
         return jsonify({"status": "error", "message": "Query returned no results"}), 500
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        # Log the exception in the development terminal
+        print(f"Database connection error: {e}")
+        return jsonify({"status": "error", "message": "Database connection failed"}), 500
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template("500.html"), 500
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=DEBUG)
