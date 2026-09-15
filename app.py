@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from dotenv import load_dotenv
 import os
+import MySQLdb
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY, DEBUG
 
 # Load environment variables from .env file
@@ -46,7 +47,7 @@ def login():
     """Login route - display login form and handle authentication."""
     # If already logged in, redirect to home
     if "user_id" in session:
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard"))
 
     if request.method == "POST":
         username = request.form.get("username", "").strip()
@@ -76,7 +77,7 @@ def login():
             session["user_id"] = user[0]
             session["username"] = user[1]
             session["role"] = user[4]
-            return redirect(url_for("home"))
+            return redirect(url_for("dashboard"))
         else:
             # Invalid credentials - don't reveal if username or password was wrong
             return render_template(
@@ -94,6 +95,13 @@ def logout():
     # Clear all session data
     session.clear()
     return redirect(url_for("login"))
+
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    """Protected dashboard page - requires login."""
+    return f"Welcome to Employee360\nWelcome, {session['username']}"
 
 
 @app.route("/db-test")
