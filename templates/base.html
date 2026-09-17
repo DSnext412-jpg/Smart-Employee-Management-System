@@ -61,7 +61,7 @@
                     Dashboard
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item {% if request.path.startswith('/employees') %}active{% endif %}">
                 <a class="nav-link" href="/employees">
                     <span class="bi bi-person-meet me-2"></span>
                     Employees
