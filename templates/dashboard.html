@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Employee360{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <!-- Total Employees Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-white bg-primary o-h">
+            <div class="card-header">
+                <h5 class="mb-0">Total Employees</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ total_employees }}</h2>
+                <p class="card-text">employees in system</p>
+            </div>
+        </div>
+    </div>
+    <!-- Departments Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-white bg-success o-h">
+            <div class="card-header">
+                <h5 class="mb-0">Departments</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ total_departments }}</h2>
+                <p class="card-text">departments</p>
+            </div>
+        </div>
+    </div>
+    <!-- Today's Attendance Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-white bg-info o-h">
+            <div class="card-header">
+                <h5 class="mb-0">Today's Attendance</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ today_attendance }}</h2>
+                <p class="card-text">present today</p>
+            </div>
+        </div>
+    </div>
+    <!-- Pending Leaves Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-white bg-warning o-h">
+            <div class="card-header">
+                <h5 class="mb-0">Pending Leaves</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ pending_leaves }}</h2>
+                <p class="card-text">pending requests</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

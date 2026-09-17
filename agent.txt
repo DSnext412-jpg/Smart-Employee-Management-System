@@ -1,0 +1,111 @@
+Employee360 Project Summary — Phases 5 & 6
+
+Project Overview
+Employee360 — Smart Employee Management System built with Flask + MySQL. Currently at Phase 6 completion.
+
+Phase 5 — Main Application Layout, Sidebar and Navbar
+
+Files Modified:
+
+1. templates/base.html — Complete layout overhaul
+   - Added Bootstrap Icons CDN for bi- classes
+   - Added proper Bootstrap grid structure: .container-fluid > .row wrapping sidebar + main content
+   - Sidebar: aside element with responsive grid classes col-12 col-md-3 col-lg-2 col-xl-2
+   - Main content: main element with col-12 col-md-9 col-lg-10 col-xl-10
+   - Active sidebar link: Jinja condition {% if request.path == '/dashboard' %}active{% endif %}
+   - User info in navbar: shows session.username when logged in, dropdown with logout
+   - Login page remains separate (no sidebar forced on it)
+   - Removed forgotten credentials text from login.html
+   - Flash message support added
+
+2. templates/dashboard.html — Updated to extend base.html
+   - Placeholder cards with 0 values kept (to be replaced in Phase 6)
+
+3. templates/login.html — Cleaned up
+   - Removed the {# Forgot credentials link removed... #} comment entirely
+
+4. app.py — Dashboard route updated
+   - Changed from returning plain text to render_template("dashboard.html")
+   - Dashboard remains protected by @login_required
+
+5. static/css/style.css — Cleaned up
+   - Simplified to essential sidebar/main/content/navbar styles
+   - Updated outdated comment
+
+6. static/js/script.js — Simplified
+   - Removed custom column class manipulation JS
+   - Bootstrap grid handles responsiveness natively
+
+Phase 5 Corrections:
+
+1. templates/base.html (line 98): col-xl-9 -> col-xl-10 (sidebar is col-xl-2, total = 12)
+2. static/css/style.css (line 5): Updated comment from "Sidebar - sticky on desktop, hidden on mobile (col-12 on smaller screens)" to "Sidebar layout and navigation styling"
+
+Phase 5 Testing verified:
+- /login loads correctly
+- Login with valid credentials works
+- /dashboard redirects to login when not logged in
+- Navbar and sidebar visible on dashboard
+- Username displayed in navbar
+- Logout works via /logout route
+- After logout, /dashboard redirects to login
+- /db-test still works
+- No template/Flask/Jinja errors
+- Responsive layout: desktop shows sidebar beside content, mobile stacks full-width
+
+Phase 6 — Dashboard Functionality with Real MySQL Data
+
+Files Modified:
+
+1. app.py — Dashboard route now queries MySQL
+   - Added 4 database queries using existing get_db_connection():
+     - SELECT COUNT(*) FROM employees -> total_employees
+     - SELECT COUNT(*) FROM departments -> total_departments
+     - SELECT COUNT(*) FROM attendance WHERE date = CURDATE() -> today_attendance
+     - SELECT COUNT(*) FROM leaves WHERE status = 'pending' -> pending_leaves
+   - Connection and cursor properly closed
+   - Variables passed to render_template("dashboard.html", ...)
+   - @login_required decorator preserved
+   - Existing routes unchanged (/login, /logout, /db-test)
+
+2. templates/dashboard.html — Dynamic values
+   - {{ total_employees }} replaces hard-coded 0
+   - {{ total_departments }} replaces hard-coded 0
+   - {{ today_attendance }} replaces hard-coded 0
+   - {{ pending_leaves }} replaces hard-coded 0
+   - Visual design preserved from Phase 5
+
+Phase 6 Testing verified:
+- Dashboard displays real counts from the employee360 database
+- Total Employees: 5 (matches sample data: EMP001-EMP005)
+- Total Departments: 5 (HR, Engineering, Marketing, Finance, Operations)
+- Today's Attendance: depends on current date vs attendance records (date '2024-01-15' in sample data)
+- Pending Leaves: 3 (leaves for EMP003, EMP004, EMP005 with status 'pending')
+- Authentication preserved: @login_required still works
+- Logout still redirects to login
+- /db-test still works
+- Navbar dropdown works
+- Sidebar still works
+- No Python/Flask/Jinja/MySQL errors
+- Dashboard values match direct SQL queries
+
+Files NOT Modified (preserved per rules):
+- database/schema.sql — unchanged
+- requirements.txt — unchanged
+- config.py — unchanged
+- Authentication/login/logout logic — completely preserved
+- Plain-text password comparison — unchanged
+- Navbar/sidebar layout from Phase 5 — unchanged
+- 404.html and 500.html — unchanged
+- No ORM, no password hashing, no React, no Node.js
+
+Expected Data from Sample Database:
+
+| Statistic | Expected Value | Query |
+|-----------|---------------|-------|
+| Total Employees | 5 | SELECT COUNT(*) FROM employees |
+| Total Departments | 5 | SELECT COUNT(*) FROM departments |
+| Today's Attendance | 5 (if today = 2024-01-15) or 0 | SELECT COUNT(*) FROM attendance WHERE date = CURDATE() |
+| Pending Leaves | 3 | SELECT COUNT(*) FROM leaves WHERE status = 'pending' |
+
+To continue later: Say "read agent.txt" to reload this summary, then proceed with the next phase.

@@ -101,7 +101,35 @@ def logout():
 @login_required
 def dashboard():
     """Protected dashboard page - requires login."""
-    return f"Welcome to Employee360\nWelcome, {session['username']}"
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Total employees
+    cursor.execute("SELECT COUNT(*) FROM employees")
+    total_employees = cursor.fetchone()[0]
+
+    # Total departments
+    cursor.execute("SELECT COUNT(*) FROM departments")
+    total_departments = cursor.fetchone()[0]
+
+    # Today's attendance
+    cursor.execute("SELECT COUNT(*) FROM attendance WHERE date = CURDATE()")
+    today_attendance = cursor.fetchone()[0]
+
+    # Pending leaves
+    cursor.execute("SELECT COUNT(*) FROM leaves WHERE status = 'pending'")
+    pending_leaves = cursor.fetchone()[0]
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "dashboard.html",
+        total_employees=total_employees,
+        total_departments=total_departments,
+        today_attendance=today_attendance,
+        pending_leaves=pending_leaves
+    )
 
 
 @app.route("/db-test")

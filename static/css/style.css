@@ -1,5 +1,28 @@
-/* Simple test stylesheet to confirm CSS loads */
-body {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    background-color: #f8f9fc;
+/* Employee360 - Main Stylesheet */
+/* Bootstrap 5 is loaded via CDN in templates */
+/* Bootstrap Icons is loaded via CDN in templates */
+
+/* Sidebar layout and navigation styling */
+.sidebar {
+    top: 3.5rem;
+    align-self: start;
+    border-right: 1px solid #dee2e6;
+}
+
+/* Main content area - margin-left to account for sidebar on desktop */
+.main-content {
+    padding: 1rem;
+}
+
+/* Navbar brand */
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+/* Active sidebar link */
+.nav-link.active {
+    color: #0d6efd;
+    background-color: #e3f2fd;
+    border-radius: 0.35rem;
 }
