@@ -5,7 +5,6 @@ import MySQLdb
 
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY, DEBUG
 
-# Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
@@ -46,7 +45,6 @@ def login_required(f):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Login route - display login form and handle authentication."""
-    # If already logged in, redirect to home
     if "user_id" in session:
         return redirect(url_for("dashboard"))
 
@@ -54,7 +52,6 @@ def login():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
 
-        # Validate fields are not empty
         if not username or not password:
             return render_template(
                 "login.html",
@@ -64,7 +61,6 @@ def login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Search the users table using parameterized query
         cursor.execute(
             "SELECT id, username, email, password, role FROM users WHERE username = %s OR email = %s",
             (username, username),
@@ -72,28 +68,23 @@ def login():
         user = cursor.fetchone()
         conn.close()
 
-        # Verify credentials (plain text comparison)
         if user and user[3] == password:
-            # Login successful - store only necessary info in session
             session["user_id"] = user[0]
             session["username"] = user[1]
             session["role"] = user[4]
             return redirect(url_for("dashboard"))
         else:
-            # Invalid credentials - don't reveal if username or password was wrong
             return render_template(
                 "login.html",
                 error="Invalid username or password.",
             )
 
-    # GET request - display login form
     return render_template("login.html")
 
 
 @app.route("/logout")
 def logout():
     """Logout route - clear session and redirect to login."""
-    # Clear all session data
     session.clear()
     return redirect(url_for("login"))
 
@@ -105,19 +96,15 @@ def dashboard():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Total employees
     cursor.execute("SELECT COUNT(*) FROM employees")
     total_employees = cursor.fetchone()[0]
 
-    # Total departments
     cursor.execute("SELECT COUNT(*) FROM departments")
     total_departments = cursor.fetchone()[0]
 
-    # Today's attendance
     cursor.execute("SELECT COUNT(*) FROM attendance WHERE date = CURDATE()")
     today_attendance = cursor.fetchone()[0]
 
-    # Pending leaves
     cursor.execute("SELECT COUNT(*) FROM leaves WHERE status = 'pending'")
     pending_leaves = cursor.fetchone()[0]
 
@@ -279,7 +266,6 @@ def employees_add_post():
             employee_status=status
         )
 
-    # Insert new employee
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -406,18 +392,14 @@ def employee_edit_post(id):
 
     validation_errors = {}
 
-    # Employee ID required validation
     if not employee_id:
         validation_errors['employee_id'] = 'Employee ID is required.'
 
-    # Basic email validation
     if email and '@' not in email:
         validation_errors['email'] = 'Please enter a valid email address.'
 
-    # Retrieve hire_date for validation
     hire_date = request.form.get('hire_date', '').strip()
 
-    # Required field validation
     if not first_name:
         validation_errors['first_name'] = 'First Name is required.'
     if not last_name:
@@ -471,7 +453,6 @@ def employee_edit_post(id):
             employee_status=status
         )
 
-    # Update employee
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -496,7 +477,6 @@ def employee_delete(id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Verify employee exists
     cursor.execute("SELECT id FROM employees WHERE id = %s", (id,))
     existing = cursor.fetchone()
 
@@ -533,7 +513,6 @@ def db_test():
             return jsonify({"status": "success", "message": "Database connection works!"})
         return jsonify({"status": "error", "message": "Query returned no results"}), 500
     except Exception as e:
-        # Log the exception in the development terminal
         print(f"Database connection error: {e}")
         return jsonify({"status": "error", "message": "Database connection failed"}), 500
 
