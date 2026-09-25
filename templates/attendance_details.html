@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Details - Employee360{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2><span class="icon">&#9744;</span>Attendance Details</h2>
+    <div>
+        <a href="/attendance" class="btn btn-secondary">&#8592; Back</a>
+        <a href="/attendance/{{ attendance.id }}/edit" class="btn btn-warning">&#9998; Edit</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="details-grid">
+            <div class="details-row">
+                <div class="details-label">Employee ID</div>
+                <div class="details-value">{{ attendance.employee_code }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Employee Name</div>
+                <div class="details-value">{{ attendance.first_name }} {{ attendance.last_name }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Position</div>
+                <div class="details-value">{{ attendance.position or '-' }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Department</div>
+                <div class="details-value">{{ attendance.department_name or '-' }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Attendance Date</div>
+                <div class="details-value">{{ attendance.date }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Check In</div>
+                <div class="details-value">{{ attendance.check_in or '-' }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Check Out</div>
+                <div class="details-value">{{ attendance.check_out or '-' }}</div>
+            </div>
+            <div class="details-row">
+                <div class="details-label">Status</div>
+                <div class="details-value">
+                    <span class="badge {% if attendance.status == 'present' %}badge-success{% elif attendance.status == 'absent' %}badge-danger{% elif attendance.status == 'late' %}badge-warning{% elif attendance.status == 'half day' %}badge-info{% else %}badge-secondary{% endif %}">{{ attendance.status or '-' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Edit Attendance' if attendance else 'Add Attendance' }} - Employee360{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ 'Edit Attendance' if attendance else 'Add Attendance' }}</h2>
+    <a href="/attendance" class="btn btn-secondary">&#8592; Back to List</a>
+</div>
+
+<form method="POST" action="{{ '/attendance/' ~ attendance.id ~ '/edit' if attendance else '/attendance/add' }}" novalidate>
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="employee_id" class="form-label">Employee <span class="text-danger">*</span></label>
+                <select id="employee_id" name="employee_id" class="form-select" required>
+                    <option value="">Select employee</option>
+                    {% for emp in employees %}
+                    <option value="{{ emp.id }}" {% if attendance and attendance.employee_id == emp.id %}selected{% endif %}>{{ emp.employee_id }} - {{ emp.first_name }} {{ emp.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ attendance.date if attendance else '' }}" required>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group">
+                    <label for="check_in" class="form-label">Check In</label>
+                    <input type="time" id="check_in" name="check_in" class="form-control" value="{{ attendance.check_in if attendance else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="check_out" class="form-label">Check Out</label>
+                    <input type="time" id="check_out" name="check_out" class="form-control" value="{{ attendance.check_out if attendance else '' }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                <select id="status" name="status" class="form-select" required>
+                    <option value="">Select status</option>
+                    <option value="present" {% if attendance and attendance.status == 'present' %}selected{% endif %}>Present</option>
+                    <option value="absent" {% if attendance and attendance.status == 'absent' %}selected{% endif %}>Absent</option>
+                    <option value="late" {% if attendance and attendance.status == 'late' %}selected{% endif %}>Late</option>
+                    <option value="half day" {% if attendance and attendance.status == 'half day' %}selected{% endif %}>Half Day</option>
+                </select>
+            </div>
+
+            {% if validation_errors %}
+            <div class="alert alert-danger">
+                <strong>Validation Errors</strong>
+                {% for field, message in validation_errors.items() %}
+                    <p><strong>{{ field }}:</strong> {{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary w-100" style="margin-top:1rem;">
+                &#128190; {{ 'Update Attendance' if attendance else 'Add Attendance' }}
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}

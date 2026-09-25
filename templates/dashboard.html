@@ -3,54 +3,26 @@
 {% block title %}Dashboard - Employee360{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <!-- Total Employees Card -->
-    <div class="col-md-3 col-6 mb-3">
-        <div class="card text-white bg-primary o-h">
-            <div class="card-header">
-                <h5 class="mb-0">Total Employees</h5>
-            </div>
-            <div class="card-body">
-                <h2 class="card-title">{{ total_employees }}</h2>
-                <p class="card-text">employees in system</p>
-            </div>
-        </div>
+<div class="dashboard-grid">
+    <div class="dashboard-card card-primary">
+        <h3>Total Employees</h3>
+        <h2>{{ total_employees }}</h2>
+        <p>employees in system</p>
     </div>
-    <!-- Departments Card -->
-    <div class="col-md-3 col-6 mb-3">
-        <div class="card text-white bg-success o-h">
-            <div class="card-header">
-                <h5 class="mb-0">Departments</h5>
-            </div>
-            <div class="card-body">
-                <h2 class="card-title">{{ total_departments }}</h2>
-                <p class="card-text">departments</p>
-            </div>
-        </div>
+    <div class="dashboard-card card-success">
+        <h3>Departments</h3>
+        <h2>{{ total_departments }}</h2>
+        <p>departments</p>
     </div>
-    <!-- Today's Attendance Card -->
-    <div class="col-md-3 col-6 mb-3">
-        <div class="card text-white bg-info o-h">
-            <div class="card-header">
-                <h5 class="mb-0">Today's Attendance</h5>
-            </div>
-            <div class="card-body">
-                <h2 class="card-title">{{ today_attendance }}</h2>
-                <p class="card-text">present today</p>
-            </div>
-        </div>
+    <div class="dashboard-card card-info">
+        <h3>Today's Attendance</h3>
+        <h2>{{ today_attendance }}</h2>
+        <p>present today</p>
     </div>
-    <!-- Pending Leaves Card -->
-    <div class="col-md-3 col-6 mb-3">
-        <div class="card text-white bg-warning o-h">
-            <div class="card-header">
-                <h5 class="mb-0">Pending Leaves</h5>
-            </div>
-            <div class="card-body">
-                <h2 class="card-title">{{ pending_leaves }}</h2>
-                <p class="card-text">pending requests</p>
-            </div>
-        </div>
+    <div class="dashboard-card card-warning">
+        <h3>Pending Leaves</h3>
+        <h2>{{ pending_leaves }}</h2>
+        <p>pending requests</p>
     </div>
 </div>
 {% endblock %}
