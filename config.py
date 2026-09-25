@@ -11,4 +11,3 @@ MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
 
 SECRET_KEY = os.getenv("SECRET_KEY", "a-dev-secret-key-change-in-production")
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-basedir = os.path.abspath(os.path.dirname(__file__))

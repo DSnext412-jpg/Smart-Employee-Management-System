@@ -4,6 +4,7 @@ import os
 import MySQLdb
 from MySQLdb.cursors import DictCursor
 import re
+from datetime import datetime
 
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT, SECRET_KEY, DEBUG
 
@@ -223,14 +224,12 @@ def employees_add_post():
 
     if date_of_birth:
         try:
-            from datetime import datetime
             datetime.strptime(date_of_birth, '%Y-%m-%d')
         except ValueError:
             validation_errors['date_of_birth'] = 'Invalid date format.'
 
     if hire_date:
         try:
-            from datetime import datetime
             datetime.strptime(hire_date, '%Y-%m-%d')
         except ValueError:
             validation_errors['hire_date'] = 'Invalid date format.'
@@ -407,14 +406,12 @@ def employee_edit_post(id):
 
     if date_of_birth:
         try:
-            from datetime import datetime
             datetime.strptime(date_of_birth, '%Y-%m-%d')
         except ValueError:
             validation_errors['date_of_birth'] = 'Invalid date format.'
 
     if hire_date:
         try:
-            from datetime import datetime
             datetime.strptime(hire_date, '%Y-%m-%d')
         except ValueError:
             validation_errors['hire_date'] = 'Invalid date format.'
@@ -888,7 +885,6 @@ def attendance_add_post():
 
     if date:
         try:
-            from datetime import datetime
             datetime.strptime(date, '%Y-%m-%d')
         except ValueError:
             validation_errors['date'] = 'Invalid date format.'
@@ -1037,7 +1033,6 @@ def attendance_edit_post(id):
 
     if date:
         try:
-            from datetime import datetime
             datetime.strptime(date, '%Y-%m-%d')
         except ValueError:
             validation_errors['date'] = 'Invalid date format.'

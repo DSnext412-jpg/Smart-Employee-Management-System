@@ -36,11 +36,6 @@ a {
     color: inherit;
 }
 
-.page-wrapper {
-    display: flex;
-    min-height: 100vh;
-}
-
 .navbar {
     background-color: var(--primary-color);
     color: #ffffff;
@@ -152,13 +147,6 @@ a {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
-}
-
-.card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.75rem 1rem;
-    font-weight: 600;
 }
 
 .card-body {
@@ -305,17 +293,6 @@ a {
 .btn-sm {
     padding: 0.3rem 0.6rem;
     font-size: 0.8rem;
-}
-
-.btn-logout {
-    color: #dc3545;
-    border-color: #dc3545;
-    background-color: transparent;
-}
-
-.btn-logout:hover {
-    background-color: #dc3545;
-    color: #ffffff;
 }
 
 .form-group {
@@ -468,12 +445,6 @@ textarea.form-select {
     background-color: #fff3cd;
     color: #856404;
     border: 1px solid #ffeeba;
-}
-
-.alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
 }
 
 .dashboard-grid {
@@ -690,9 +661,6 @@ textarea.form-select {
 .text-center { text-align: center; }
 .text-danger { color: #e74c3c; }
 .w-100 { width: 100%; }
-.mt-2 { margin-top: 0.5rem; }
-.mt-1 { margin-top: 0.25rem; }
-.mb-0 { margin-bottom: 0; }
 
 @media (max-width: 768px) {
     .sidebar {
