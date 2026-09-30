@@ -1,6 +1,0 @@
-venv/
-*.db
-*.sql
-__pycache__/
-*.pyc
-.env
